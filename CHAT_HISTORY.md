@@ -72,12 +72,11 @@ This is a chronological summary of all project-related user and assistant turns 
 
 **Assistant:** Added a test suite that starts a temporary backend configured for Redis DB 1, leaving the normal sandbox DB 0 untouched. Tests cover a mock accepted request, the five-token burst limit, and WebSocket rate-limit telemetry.
 
-## Repository
 
-**User:** Asked to upload the project as a new Git repository.
+## Terminal-only local mode
 
-**Assistant:** Checked project files, GitHub CLI authentication, and obvious secrets; asked for repository name and visibility before creating it.
+**User:** Asked to remove Docker and Redis integration and make the app a simple terminal application that displays data in the existing frontend.
 
-**User:** Selected repository name `otp-security-sandbox`, visibility `public`, then asked: “wuth all the chat history”.
+**User:** Clarified that the application should also accept input from the frontend.
 
-**Assistant:** Preparing to include a user-visible conversation archive in the repository while excluding local-only files and non-user-facing content.
+**Assistant:** Replaced Redis token-bucket storage with an in-memory implementation, removed Docker and Redis dependencies, and added a root `npm run dev` command to start the backend and frontend together. The existing frontend recipient form continues to submit mock requests to the local backend. Tests were changed to start a fresh local backend process per test.
