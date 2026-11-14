@@ -78,6 +78,31 @@ describe("OTP sandbox integration", () => {
     child = undefined;
   });
 
+  it("serves the existing frontend dashboard from the backend origin", async () => {
+    const response = await fetch(apiUrl);
+    const html = await response.text();
+
+    assert.equal(response.status, 200);
+    assert.match(html, /OTP Security Sandbox/);
+
+    const scriptPath = html.match(/src="([^"]+\.js)"/)?.[1];
+    assert.ok(scriptPath, "dashboard JavaScript bundle is referenced");
+    const scriptResponse = await fetch(new URL(scriptPath, apiUrl));
+    assert.equal(scriptResponse.status, 200);
+
+    const sameOriginAsset = await fetch(new URL("/assets/index-CykDSvl0.css", apiUrl), {
+      headers: { Origin: apiUrl }
+    });
+    assert.equal(sameOriginAsset.status, 200);
+  });
+
+  it("rejects cross-origin browser requests outside the local frontend", async () => {
+    const response = await fetch(`${apiUrl}/api/config`, {
+      headers: { Origin: "https://example.invalid" }
+    });
+    assert.equal(response.status, 403);
+  });
+
   it("accepts mock frontend input without sending a message", async () => {
     const response = await requestOtp();
     const body = await response.json();

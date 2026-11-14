@@ -1,0 +1,9 @@
+{
+  "name": "otp-security-sandbox",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "npm --prefix backend start",
+    "test": "npm --prefix backend test"
+  }
+}
